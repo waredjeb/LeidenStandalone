@@ -133,7 +133,7 @@ void processEvent(TTree* tree, int ev){
 
 }
 
-void processRootFile(const std::string& fileName, std::vector<Trackster>& tracksters) {
+void processRootFile(const std::string& fileName) {
     TFile* file = TFile::Open(fileName.c_str());
     if (!file || file->IsZombie()) {
         std::cerr << "Error opening file: " << fileName << std::endl;
@@ -170,15 +170,9 @@ void processRootFile(const std::string& fileName, std::vector<Trackster>& tracks
 
 // process list of root files 
 void readMultipleRootFiles(const std::vector<std::string>& fileNames) {
-    std::vector<Trackster> tracksters;
 
     for (const auto& fileName : fileNames) {
-        processRootFile(fileName, tracksters);
-    }
-
-    // Optionally, print all Tracksters
-    for (const auto& t : tracksters) {
-        t.Print();
+        processRootFile(fileName);
     }
 }
 
