@@ -147,7 +147,7 @@ void readMultipleRootFiles(const std::vector<std::string>& fileNames) {
         std::vector<Trackster> tracksters;
 
         // Loop over the entries and fill the vector with Tracksters
-        for (Long64_t i = 0; i < tree->GetEntries(); ++i) {
+        for (size_t i = 0; i < tree->GetEntries(); ++i) {
             tree->GetEntry(i);
 
             for (size_t j = 0; j < barycenter_x->size(); ++j) {
@@ -158,6 +158,8 @@ void readMultipleRootFiles(const std::vector<std::string>& fileNames) {
                 t.Print();
             }
         }
+        TICLGraph graph;
+        TICLGraphProducer(tracksters, graph);
 
         // Optionally, print all Tracksters
         for (const auto& t : tracksters) {
