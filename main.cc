@@ -111,7 +111,6 @@ void TICLGraphProducer(std::vector<Trackster>& trackstersclue3d, TICLGraph &grap
 
 void processEvent(TTree* tree, int ev){
     // Access specific leaves of the "tracksters" TTree
-    tree->GetEntry(ev);
     std::vector<float> *barycenter_x = nullptr, *barycenter_y = nullptr, *barycenter_z = nullptr, *raw_energy = nullptr, *barycenter_eta = nullptr, *barycenter_phi = nullptr;
 
     tree->SetBranchAddress("barycenter_x", &barycenter_x);
@@ -121,11 +120,13 @@ void processEvent(TTree* tree, int ev){
     tree->SetBranchAddress("barycenter_phi", &barycenter_phi);
     tree->SetBranchAddress("raw_energy", &raw_energy);
     std::vector<Trackster> tracksters;
+    tree->GetEntry(ev);
     for (size_t j = 0; j < barycenter_x->size(); ++j) {
        Trackster t;
        t.setBarycenter(barycenter_eta->at(j), barycenter_phi->at(j), barycenter_x->at(j), barycenter_y->at(j), barycenter_z->at(j));
        t.setRawEnergy(raw_energy->at(j));
        tracksters.push_back(t);
+       t.Print();
     }
     TICLGraph graph;
     TICLGraphProducer(tracksters, graph);
@@ -158,6 +159,7 @@ void processRootFile(const std::string& fileName, std::vector<Trackster>& tracks
 
     // Loop over the entries and fill the vector with Tracksters
     for (size_t ev = 0; ev < tree->GetEntries(); ++ev) {
+        std::cout << "ev " << ev << std::endl;
         processEvent(tree, ev);
     }
 
